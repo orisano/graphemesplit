@@ -31,8 +31,11 @@ http.get('http://www.unicode.org/Public/UCD/latest/ucd/auxiliary/GraphemeBreakPr
         Glue_After_Zwj: 15,
         E_Base_GAZ: 16,
     }
-
     res.setEncoding('utf8')
+
+    const sorted = fs.createWriteStream('./sorted.json')
+    const k = fs.createWriteStream('./kind.json')
+    let first = true
     res
         .pipe(split())
         .pipe(through(function write(data) {
@@ -54,4 +57,21 @@ http.get('http://www.unicode.org/Public/UCD/latest/ucd/auxiliary/GraphemeBreakPr
             }
         }))
         .pipe(sort((a, b) => a.low - b.low))
+        .on('data', data => {
+            if (first) {
+                sorted.write('[')
+                k.write('[')
+                first = false
+            } else {
+                sorted.write(',')
+                k.write(',')
+            }
+            sorted.write(`${data.low},${data.high}`)
+            k.write(`${data.kind}`)
+        })
+        .on('end', () => {
+            sorted.write(']')
+            k.write(']')
+        })
+
 })

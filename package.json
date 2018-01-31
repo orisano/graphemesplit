@@ -1,0 +1,15 @@
+{
+  "name": "graphemesplit",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Nao YONASHIRO",
+  "license": "MIT",
+  "devDependencies": {
+    "sort-stream": "^1.0.1",
+    "split": "^1.0.1",
+    "through": "^2.3.8"
+  },
+  "dependencies": {
+    "debug": "^3.1.0"
+  }
+}

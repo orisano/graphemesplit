@@ -1,8 +1,9 @@
 const http = require('http')
-const split = require('split')
-const through = require('through')
-const sort = require('sort-stream')
-const fs = require('fs')
+
+const es = require('event-stream')
+const UnicodeTrieBuilder = require('unicode-trie/builder')
+
+const types = require('./types')
 
 http.get('http://www.unicode.org/Public/UCD/latest/ucd/auxiliary/GraphemeBreakProperty.txt', res => {
     const { statusCode } = res
@@ -12,66 +13,33 @@ http.get('http://www.unicode.org/Public/UCD/latest/ucd/auxiliary/GraphemeBreakPr
         return
     }
 
-    const kindMap = {
-        CR: 0,
-        LF: 1,
-        Control: 2,
-        Extend: 3,
-        ZWJ: 4,
-        Regional_Indicator: 5,
-        Prepend: 6,
-        SpacingMark: 7,
-        L: 8,
-        V: 9,
-        T: 10,
-        LV: 11,
-        LVT: 12,
-        E_Base: 13,
-        E_Modifier: 14,
-        Glue_After_Zwj: 15,
-        E_Base_GAZ: 16,
-    }
-    res.setEncoding('utf8')
-
-    const sorted = fs.createWriteStream('./sorted.json')
-    const k = fs.createWriteStream('./kind.json')
-    let first = true
+    const trie = new UnicodeTrieBuilder(types.Any)
     res
-        .pipe(split())
-        .pipe(through(function write(data) {
+        .pipe(es.split())
+        .pipe(es.through(function write(data) {
             this.queue(data.split('#')[0])
         }))
-        .pipe(through(function write(data) {
+        .pipe(es.through(function write(data) {
             if (data.trim().length > 0) {
                 this.queue(data)
             }
         }))
-        .pipe(through(function write(data) {
+        .pipe(es.through(function write(data) {
             const [key, value] = data.split(';').map(x => x.trim())
             const range = key.split('..').map(x => parseInt(x, 16))
-            const kind = kindMap[value]
+            const type = types[value]
             if (range.length > 1) {
-                this.queue({low: range[0], high: range[1] + 1, kind})
+                this.queue({start: range[0], end: range[1], type})
             } else {
-                this.queue({low: range[0], high: range[0] + 1, kind})
+                this.queue({start: range[0], end: range[0], type})
             }
         }))
-        .pipe(sort((a, b) => a.low - b.low))
-        .on('data', data => {
-            if (first) {
-                sorted.write('[')
-                k.write('[')
-                first = false
-            } else {
-                sorted.write(',')
-                k.write(',')
-            }
-            sorted.write(`${data.low},${data.high}`)
-            k.write(`${data.kind}`)
+        .on('data', ({start, end, type}) => {
+            trie.setRange(start, end, type)
         })
         .on('end', () => {
-            sorted.write(']')
-            k.write(']')
+            process.stdout.write(JSON.stringify({
+                data: trie.toBuffer().toString('base64'),
+            }))
         })
-
 })

@@ -1,9 +1,10 @@
 {
   "name": "graphemesplit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "author": "Nao YONASHIRO",
   "license": "MIT",
+  "repository": "github:orisano/graphemesplit",
   "devDependencies": {
     "event-stream": "^3.3.4"
   },

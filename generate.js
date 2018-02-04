@@ -13,7 +13,7 @@ http.get('http://www.unicode.org/Public/UCD/latest/ucd/auxiliary/GraphemeBreakPr
         return
     }
 
-    const trie = new UnicodeTrieBuilder(types.Any)
+    const trie = new UnicodeTrieBuilder(types.Other)
     res
         .pipe(es.split())
         .pipe(es.through(function write(data) {

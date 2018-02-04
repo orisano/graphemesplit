@@ -1,11 +1,11 @@
-const http = require('http')
+const https = require('https')
 
 const es = require('event-stream')
 const UnicodeTrieBuilder = require('unicode-trie/builder')
 
 const types = require('./types')
 
-http.get('http://www.unicode.org/Public/UCD/latest/ucd/auxiliary/GraphemeBreakProperty.txt', res => {
+https.get('https://www.unicode.org/Public/UCD/latest/ucd/auxiliary/GraphemeBreakProperty.txt', res => {
     const { statusCode } = res
     if (statusCode !== 200) {
         console.error(`failed to request: ${statusCode}`)

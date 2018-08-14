@@ -22,3 +22,5 @@ MIT
 [Unicode® Standard Annex #29](https://unicode.org/reports/tr29/)
 
 [GraphemeBreakTest.txt](https://www.unicode.org/Public/UNIDATA/auxiliary/GraphemeBreakTest.txt)
+
+[emoji-data.txt](https://unicode.org/Public/emoji/11.0/emoji-data.txt)

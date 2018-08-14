@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": "github:orisano/graphemesplit",
   "devDependencies": {
-    "event-stream": "^3.3.4"
+    "@orisano/lines-stream": "^0.1.2"
   },
   "dependencies": {
     "unicode-trie": "^0.3.1"

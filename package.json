@@ -5,8 +5,12 @@
   "author": "Nao YONASHIRO",
   "license": "MIT",
   "repository": "github:orisano/graphemesplit",
+  "scripts": {
+      "fmt": "prettier --write **/*.js"
+  },
   "devDependencies": {
-    "@orisano/lines-stream": "^0.1.2"
+    "@orisano/lines-stream": "^0.1.2",
+    "prettier": "^1.16.4"
   },
   "dependencies": {
     "unicode-trie": "^0.3.1"

@@ -13,5 +13,5 @@ module.exports = {
   T: 1 << 10,
   LV: 1 << 11,
   LVT: 1 << 12,
-  Extended_Pictographic: 1 << 13,
-}
+  Extended_Pictographic: 1 << 13
+};

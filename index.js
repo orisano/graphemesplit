@@ -110,13 +110,22 @@ function nextGraphemeClusterSize(ts, start) {
 module.exports = function split(str) {
   const graphemeClusters = []
 
-  const codePoints = [...str].map(x => x.codePointAt(0))
-  const ts = codePoints.map(c => typeTrie.get(c) | extPict.get(c))
-  for (let offset = 0; offset < codePoints.length;) {
+  const map = [0]
+  const ts = []
+  for (let i = 0; i < str.length;) {
+    const code = str.codePointAt(i)
+    ts.push(typeTrie.get(code) | extPict.get(code))
+    i += code > 65535 ? 2 : 1
+    map.push(i)
+  }
+  
+  for (let offset = 0; offset < ts.length;) {
     const size = nextGraphemeClusterSize(ts, offset)
-    const graphemeCluster = codePoints.slice(offset, offset + size)
-    graphemeClusters.push(String.fromCodePoint(...graphemeCluster))
+    const start = map[offset]
+	const end = map[offset + size]
+    graphemeClusters.push(str.slice(start, end))
     offset += size
   }
+
   return graphemeClusters
 }

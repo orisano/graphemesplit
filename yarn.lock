@@ -5,10 +5,12 @@
 "@orisano/lines-stream@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@orisano/lines-stream/-/lines-stream-0.1.2.tgz#ebac8657359893b392b242b1015eb06ef1d7862d"
+  integrity sha512-JQWmy06i1xs0x7nK+NGEOivUqi5aYUklsKrAa6Wwo+IzjonNDyAynFYT5DZ/Sg5n3Tt0B9Pe/7VibkQRpY2f+A==
 
 pako@^0.2.5:
   version "0.2.9"
   resolved "https://registry.yarnpkg.com/pako/-/pako-0.2.9.tgz#f3f7522f4ef782348da8161bad9ecfd51bf83a75"
+  integrity sha1-8/dSL073gjSNqBYbrZ7P1Rv4OnU=
 
 prettier@^1.16.4:
   version "1.16.4"
@@ -18,10 +20,12 @@ prettier@^1.16.4:
 tiny-inflate@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/tiny-inflate/-/tiny-inflate-1.0.2.tgz#93d9decffc8805bd57eae4310f0b745e9b6fb3a7"
+  integrity sha1-k9nez/yIBb1X6uQxDwt0Xptvs6c=
 
 unicode-trie@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/unicode-trie/-/unicode-trie-0.3.1.tgz#d671dddd89101a08bac37b6a5161010602052085"
+  integrity sha1-1nHd3YkQGgi6w3tqUWEBBgIFIIU=
   dependencies:
     pako "^0.2.5"
     tiny-inflate "^1.0.0"

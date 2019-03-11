@@ -1,12 +1,12 @@
 {
   "name": "graphemesplit",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "main": "index.js",
   "author": "Nao YONASHIRO",
   "license": "MIT",
   "repository": "github:orisano/graphemesplit",
   "scripts": {
-      "fmt": "prettier --write **/*.js"
+    "fmt": "prettier --write **/*.js"
   },
   "devDependencies": {
     "@orisano/lines-stream": "^0.1.2",

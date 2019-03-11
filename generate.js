@@ -59,7 +59,7 @@ https.get(
   }
 );
 
-https.get("https://unicode.org/Public/emoji/11.0/emoji-data.txt", res => {
+https.get("https://unicode.org/Public/emoji/12.0/emoji-data.txt", res => {
   const { statusCode } = res;
   if (statusCode !== 200) {
     console.error(`failed to request: ${statusCode}`);

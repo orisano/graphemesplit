@@ -1,5 +1,5 @@
-var { performance } = require("perf_hooks");
-var split = require("./index");
+const { performance } = require("perf_hooks");
+const split = require("./index");
 
 // when a Javascript engine notices a function being called frequently,
 // it will pass it through the optimizer. For consistency, we'd like to make

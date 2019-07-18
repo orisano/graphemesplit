@@ -4,8 +4,26 @@ const extPictData = require("./extPict").data;
 
 const UnicodeTrie = require("unicode-trie");
 
-const typeTrie = new UnicodeTrie(Buffer.from(typeTrieData, "base64"));
-const extPict = new UnicodeTrie(Buffer.from(extPictData, "base64"));
+const base64ToUnicodeTrie =
+  typeof atob === "function"
+    ? function base64ToUnicodeTrie(s) {
+        function charCodeAt(c) {
+          return c.charCodeAt(0);
+        }
+        return new UnicodeTrie(
+          new Uint8Array(
+            atob(s)
+              .split("")
+              .map(charCodeAt)
+          )
+        );
+      }
+    : function base64ToUnicodeTrie(s) {
+        return new UnicodeTrie(Buffer.from(s, "base64"));
+      };
+
+const typeTrie = base64ToUnicodeTrie(typeTrieData);
+const extPict = base64ToUnicodeTrie(extPictData);
 
 function is(type, bit) {
   return (type & bit) !== 0;

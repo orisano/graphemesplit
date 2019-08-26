@@ -6,12 +6,15 @@ A JavaScript implementation of the Unicode 12.0 grapheme cluster breaking algori
 npm install graphemesplit
 ```
 
-## How to Use
+## How to use
 ```javascript
 const split = require('graphemesplit')
 
 split('Z͑ͫ̓ͪ̂ͫ̽͏̴̙̤̞͉͚̯̞̠͍A̴̵̜̰͔ͫ͗͢L̠ͨͧͩ͘G̴̻͈͍͔̹̑͗̎̅͛́Ǫ̵̹̻̝̳͂̌̌͘!͖̬̰̙̗̿̋ͥͥ̂ͣ̐́́͜͞') // => ['Z͑ͫ̓ͪ̂ͫ̽͏̴̙̤̞͉͚̯̞̠͍','A̴̵̜̰͔ͫ͗͢','L̠ͨͧͩ͘','G̴̻͈͍͔̹̑͗̎̅͛́','Ǫ̵̹̻̝̳͂̌̌͘','!͖̬̰̙̗̿̋ͥͥ̂ͣ̐́́͜͞']
 ```
+
+## Author
+Nao YONASHIRO(@orisano)
 
 ## License
 MIT

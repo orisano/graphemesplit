@@ -7,7 +7,7 @@ const linesStream = require("@orisano/lines-stream");
 const graphemesplit = require("./");
 
 https.get(
-  "https://www.unicode.org/Public/UNIDATA/auxiliary/GraphemeBreakTest.txt",
+  "https://www.unicode.org/Public/13.0.0/ucd/auxiliary/GraphemeBreakTest.txt",
   res => {
     const { statusCode } = res;
     if (statusCode !== 200) {

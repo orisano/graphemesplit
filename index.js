@@ -11,11 +11,7 @@ const base64ToUnicodeTrie =
           return c.charCodeAt(0);
         }
         return new UnicodeTrie(
-          new Uint8Array(
-            atob(s)
-              .split("")
-              .map(charCodeAt)
-          )
+          new Uint8Array(atob(s).split("").map(charCodeAt))
         );
       }
     : function base64ToUnicodeTrie(s) {
@@ -32,7 +28,7 @@ function is(type, bit) {
 const GB11State = {
   Initial: 0,
   ExtendOrZWJ: 1,
-  NotBoundary: 2
+  NotBoundary: 2,
 };
 
 function nextGraphemeClusterSize(ts, start) {

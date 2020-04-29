@@ -8,7 +8,7 @@ const graphemesplit = require("./");
 
 https.get(
   "https://www.unicode.org/Public/13.0.0/ucd/auxiliary/GraphemeBreakTest.txt",
-  res => {
+  (res) => {
     const { statusCode } = res;
     if (statusCode !== 200) {
       console.error(`failed to http request: ${statusCode}`);
@@ -31,15 +31,15 @@ https.get(
             if (test.length === 0) return;
             const graphemeClusters = test
               .split("÷")
-              .filter(x => x.length > 0)
-              .map(x => {
+              .filter((x) => x.length > 0)
+              .map((x) => {
                 const codePoints = x
                   .split("×")
-                  .map(y => parseInt(y.trim(), 16));
+                  .map((y) => parseInt(y.trim(), 16));
                 return String.fromCodePoint(...codePoints);
               });
             this.push({ expected: graphemeClusters, description });
-          }
+          },
         })
       )
       .on("data", ({ expected, description }) => {

@@ -18,21 +18,21 @@ function parseLine() {
         callback();
         return;
       }
-      const [rawRange, type] = body.split(";").map(x => x.trim());
-      const range = rawRange.split("..").map(x => parseInt(x, 16));
+      const [rawRange, type] = body.split(";").map((x) => x.trim());
+      const range = rawRange.split("..").map((x) => parseInt(x, 16));
       if (range.length > 1) {
         this.push({ start: range[0], end: range[1], type });
       } else {
         this.push({ start: range[0], end: range[0], type });
       }
       callback();
-    }
+    },
   });
 }
 
 https.get(
   "https://www.unicode.org/Public/13.0.0/ucd/auxiliary/GraphemeBreakProperty.txt",
-  res => {
+  (res) => {
     const { statusCode } = res;
     if (statusCode !== 200) {
       console.error(`failed to request: ${statusCode}`);
@@ -52,36 +52,39 @@ https.get(
         fs.writeFileSync(
           "./typeTrie.json",
           JSON.stringify({
-            data: trie.toBuffer().toString("base64")
+            data: trie.toBuffer().toString("base64"),
           })
         );
       });
   }
 );
 
-https.get("https://www.unicode.org/Public/13.0.0/ucd/emoji/emoji-data.txt", res => {
-  const { statusCode } = res;
-  if (statusCode !== 200) {
-    console.error(`failed to request: ${statusCode}`);
-    res.resume();
-    return;
-  }
+https.get(
+  "https://www.unicode.org/Public/13.0.0/ucd/emoji/emoji-data.txt",
+  (res) => {
+    const { statusCode } = res;
+    if (statusCode !== 200) {
+      console.error(`failed to request: ${statusCode}`);
+      res.resume();
+      return;
+    }
 
-  const trie = new UnicodeTrieBuilder();
-  res
-    .setEncoding("utf8")
-    .pipe(linesStream())
-    .pipe(parseLine())
-    .on("data", ({ start, end, type }) => {
-      if (type === "Extended_Pictographic")
-        trie.setRange(start, end, types.Extended_Pictographic);
-    })
-    .on("end", () => {
-      fs.writeFileSync(
-        "./extPict.json",
-        JSON.stringify({
-          data: trie.toBuffer().toString("base64")
-        })
-      );
-    });
-});
+    const trie = new UnicodeTrieBuilder();
+    res
+      .setEncoding("utf8")
+      .pipe(linesStream())
+      .pipe(parseLine())
+      .on("data", ({ start, end, type }) => {
+        if (type === "Extended_Pictographic")
+          trie.setRange(start, end, types.Extended_Pictographic);
+      })
+      .on("end", () => {
+        fs.writeFileSync(
+          "./extPict.json",
+          JSON.stringify({
+            data: trie.toBuffer().toString("base64"),
+          })
+        );
+      });
+  }
+);

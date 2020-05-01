@@ -19,7 +19,7 @@ Nao YONASHIRO(@orisano)
 ## License
 MIT
 
-## Reference
+## References
 [devongovett/grapheme-breaker](https://github.com/devongovett/grapheme-breaker)
 
 [Unicode® Standard Annex #29](https://unicode.org/reports/tr29/)

@@ -14,7 +14,7 @@ split('Z͑ͫ̓ͪ̂ͫ̽͏̴̙̤̞͉͚̯̞̠͍A̴̵̜̰͔ͫ͗͢L̠ͨͧͩ͘G̴̻͈�
 ```
 
 ## Author
-Nao YONASHIRO(@orisano)
+Nao Yonashiro(@orisano)
 
 ## License
 MIT

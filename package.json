@@ -2,7 +2,7 @@
   "name": "graphemesplit",
   "version": "2.4.0",
   "main": "index.js",
-  "author": "Nao YONASHIRO",
+  "author": "Nao Yonashiro",
   "license": "MIT",
   "repository": "github:orisano/graphemesplit",
   "scripts": {

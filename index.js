@@ -1,6 +1,6 @@
 const types = require("./types");
-const typeTrieData = require("./typeTrie").data;
-const extPictData = require("./extPict").data;
+const typeTrieData = require("./typeTrie.json").data;
+const extPictData = require("./extPict.json").data;
 
 const UnicodeTrie = require("unicode-trie");
 

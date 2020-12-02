@@ -20,7 +20,7 @@ Nao Yonashiro(@orisano)
 MIT
 
 ## References
-[devongovett/grapheme-breaker](https://github.com/devongovett/grapheme-breaker)
+[foliojs/grapheme-breaker](https://github.com/foliojs/grapheme-breaker)
 
 [Unicode® Standard Annex #29](https://unicode.org/reports/tr29/)
 

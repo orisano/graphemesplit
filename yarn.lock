@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@orisano/lines-stream/-/lines-stream-0.1.2.tgz#ebac8657359893b392b242b1015eb06ef1d7862d"
   integrity sha512-JQWmy06i1xs0x7nK+NGEOivUqi5aYUklsKrAa6Wwo+IzjonNDyAynFYT5DZ/Sg5n3Tt0B9Pe/7VibkQRpY2f+A==
 
+js-base64@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-3.6.0.tgz#773e1de628f4f298d65a7e9842c50244751f5756"
+  integrity sha512-wVdUBYQeY2gY73RIlPrysvpYx+2vheGo8Y1SNQv/BzHToWpAZzJU7Z6uheKMAe+GLSBig5/Ps2nxg/8tRB73xg==
+
 pako@^0.2.5:
   version "0.2.9"
   resolved "https://registry.yarnpkg.com/pako/-/pako-0.2.9.tgz#f3f7522f4ef782348da8161bad9ecfd51bf83a75"

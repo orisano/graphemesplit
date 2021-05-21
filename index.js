@@ -3,23 +3,10 @@ const typeTrieData = require("./typeTrie.json").data;
 const extPictData = require("./extPict.json").data;
 
 const UnicodeTrie = require("unicode-trie");
+const Base64 = require("js-base64").Base64;
 
-const base64ToUnicodeTrie =
-  typeof atob === "function"
-    ? function base64ToUnicodeTrie(s) {
-        function charCodeAt(c) {
-          return c.charCodeAt(0);
-        }
-        return new UnicodeTrie(
-          new Uint8Array(atob(s).split("").map(charCodeAt))
-        );
-      }
-    : function base64ToUnicodeTrie(s) {
-        return new UnicodeTrie(Buffer.from(s, "base64"));
-      };
-
-const typeTrie = base64ToUnicodeTrie(typeTrieData);
-const extPict = base64ToUnicodeTrie(extPictData);
+const typeTrie = new UnicodeTrie(Base64.toUint8Array(typeTrieData));
+const extPict = new UnicodeTrie(Base64.toUint8Array(extPictData));
 
 function is(type, bit) {
   return (type & bit) !== 0;

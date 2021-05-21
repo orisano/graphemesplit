@@ -13,6 +13,7 @@
     "prettier": "^2.0.5"
   },
   "dependencies": {
+    "js-base64": "^3.6.0",
     "unicode-trie": "^2.0.0"
   }
 }

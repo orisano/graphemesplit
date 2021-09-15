@@ -1,5 +1,5 @@
 # graphemesplit
-A JavaScript implementation of the Unicode 13.0 grapheme cluster breaking algorithm. ([UAX #29](http://www.unicode.org/reports/tr29/#Grapheme_Cluster_Boundaries))
+A JavaScript implementation of the Unicode 14.0 grapheme cluster breaking algorithm. ([UAX #29](http://www.unicode.org/reports/tr29/#Grapheme_Cluster_Boundaries))
 
 ## Installation
 ```bash
@@ -24,6 +24,8 @@ MIT
 
 [Unicode® Standard Annex #29](https://unicode.org/reports/tr29/)
 
-[GraphemeBreakTest.txt](https://www.unicode.org/Public/13.0.0/ucd/auxiliary/GraphemeBreakTest.txt)
+[GraphemeBreakProperty.txt](https://www.unicode.org/Public/14.0.0/ucd/auxiliary/GraphemeBreakProperty.txt)
 
-[emoji-data.txt](https://www.unicode.org/Public/13.0.0/ucd/emoji/emoji-data.txt)
+[GraphemeBreakTest.txt](https://www.unicode.org/Public/14.0.0/ucd/auxiliary/GraphemeBreakTest.txt)
+
+[emoji-data.txt](https://www.unicode.org/Public/14.0.0/ucd/emoji/emoji-data.txt)

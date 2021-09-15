@@ -31,7 +31,7 @@ function parseLine() {
 }
 
 https.get(
-  "https://www.unicode.org/Public/13.0.0/ucd/auxiliary/GraphemeBreakProperty.txt",
+  "https://www.unicode.org/Public/14.0.0/ucd/auxiliary/GraphemeBreakProperty.txt",
   (res) => {
     const { statusCode } = res;
     if (statusCode !== 200) {
@@ -60,7 +60,7 @@ https.get(
 );
 
 https.get(
-  "https://www.unicode.org/Public/13.0.0/ucd/emoji/emoji-data.txt",
+  "https://www.unicode.org/Public/14.0.0/ucd/emoji/emoji-data.txt",
   (res) => {
     const { statusCode } = res;
     if (statusCode !== 200) {

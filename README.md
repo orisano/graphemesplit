@@ -1,4 +1,6 @@
 # graphemesplit
+[![npm version](https://badge.fury.io/js/graphemesplit.svg)](https://badge.fury.io/js/graphemesplit)
+
 A JavaScript implementation of the Unicode 14.0 grapheme cluster breaking algorithm. ([UAX #29](http://www.unicode.org/reports/tr29/#Grapheme_Cluster_Boundaries))
 
 ## Installation

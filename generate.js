@@ -18,12 +18,12 @@ function parseLine() {
         callback();
         return;
       }
-      const [rawRange, type] = body.split(";").map((x) => x.trim());
+      const [rawRange, type, val] = body.split(";").map((x) => x.trim());
       const range = rawRange.split("..").map((x) => parseInt(x, 16));
       if (range.length > 1) {
-        this.push({ start: range[0], end: range[1], type });
+        this.push({ start: range[0], end: range[1], type, val });
       } else {
-        this.push({ start: range[0], end: range[0], type });
+        this.push({ start: range[0], end: range[0], type, val });
       }
       callback();
     },
@@ -56,6 +56,41 @@ https.get(
           })
         );
       });
+  }
+);
+
+https.get(
+  "https://www.unicode.org/Public/16.0.0/ucd/DerivedCoreProperties.txt",
+  (res) => {
+    const { statusCode } = res;
+    if (statusCode !== 200) {
+      console.error(`failed to request: ${statusCode}`);
+      res.resume();
+      return;
+    }
+    const trie = new UnicodeTrieBuilder();
+    const valMap = {
+      Linker: types.InCB_Linker,
+      Consonant: types.InCB_Consonant,
+      Extend: types.InCB_Extend,
+    };
+    res
+      .setEncoding("utf8")
+      .pipe(linesStream())
+      .pipe(parseLine())
+      .on("data", ({ start, end, type, val }) => {
+        if (type === "InCB") {
+          trie.setRange(start, end, valMap[val]);
+        }
+      })
+      .on("end", () => {
+        fs.writeFileSync(
+          "./inCB.json",
+          JSON.stringify({
+            data: trie.toBuffer().toString("base64"),
+          })
+        );
+      })
   }
 );
 

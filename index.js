@@ -1,12 +1,14 @@
 const types = require("./types");
 const typeTrieData = require("./typeTrie.json").data;
 const extPictData = require("./extPict.json").data;
+const inCBData = require("./inCB.json").data;
 
 const UnicodeTrie = require("unicode-trie");
 const Base64 = require("js-base64").Base64;
 
 const typeTrie = new UnicodeTrie(Base64.toUint8Array(typeTrieData));
 const extPict = new UnicodeTrie(Base64.toUint8Array(extPictData));
+const inCB = new UnicodeTrie(Base64.toUint8Array(inCBData));
 
 function is(type, bit) {
   return (type & bit) !== 0;
@@ -18,11 +20,20 @@ const GB11State = {
   NotBoundary: 2,
 };
 
+const GB9cState = {
+  Initial: 0,
+  ExtendOrLinker: 1,
+  Linker: 2,
+  Extend: 3,
+  Linker2: 4,
+};
+
 function nextGraphemeClusterSize(ts, start) {
   const L = ts.length;
 
   let ri = 0;
   let gb11State = GB11State.Initial;
+  let gb9cState = GB9cState.Initial;
 
   // GB1: sot ÷ Any
   for (let i = start; i + 1 < L; i++) {
@@ -56,6 +67,47 @@ function nextGraphemeClusterSize(ts, start) {
           gb11State = GB11State.Initial;
         }
         break;
+    }
+
+    switch (gb9cState) {
+      case GB9cState.Initial:
+        if (is(curr, types.InCB_Consonant)) {
+          gb9cState = GB9cState.ExtendOrLinker;
+        }
+      case GB9cState.ExtendOrLinker:
+        if (is(curr, types.InCB_Extend)) {
+          gb9cState = GB9cState.Linker;
+        } else if (is(curr, types.InCB_Linker)) {
+          gb9cState = GB9cState.Extend;
+        } else if (is(curr, types.InCB_Consonant)) {
+          gb9cState = GB9cState.ExtendOrLinker;
+        } else {
+          gb9cState = GB9cState.Initial;
+        }
+      case GB9cState.Linker:
+        if (is(curr, types.InCB_Linker)) {
+          gb9cState = GB9cState.ExtendOrLinker;
+        } else if (is(curr, types.InCB_Consonant)) {
+          gb9cState = GB9cState.ExtendOrLinker;
+        } else {
+          gb9cState = GB9cState.Initial;
+        }
+      case GB9cState.Extend:
+        if (is(curr, types.InCB_Extend)) {
+          gb9cState = GB9cState.Linker2;
+        } else if (is(curr, types.InCB_Consonant)) {
+          gb9cState = GB9cState.ExtendOrLinker;
+        } else {
+          gb9cState = GB9cState.Initial;
+        }
+      case GB9cState.Linker2:
+        if (is(curr, types.InCB_Linker)) {
+          gb9cState = GB9cState.Extend;
+        } else if (is(curr, types.InCB_Consonant)) {
+          gb9cState = GB9cState.ExtendOrLinker;
+        } else {
+          gb9cState = GB9cState.Initial;
+        }
     }
 
     // GB3: CR x LF
@@ -97,6 +149,10 @@ function nextGraphemeClusterSize(ts, start) {
     if (is(curr, types.Prepend)) {
       continue;
     }
+    // GB9c 
+    if (is(next, types.InCB_Consonant) && gb9cState === GB9cState.Extend) {
+      continue;
+    }
     // GB11: \p{Extended_Pictographic} Extend* ZWJ x \p{Extended_Pictographic}
     if (gb11State === GB11State.NotBoundary) {
       continue;
@@ -125,7 +181,7 @@ module.exports = function split(str) {
   const ts = [];
   for (let i = 0; i < str.length; ) {
     const code = str.codePointAt(i);
-    ts.push(typeTrie.get(code) | extPict.get(code));
+    ts.push(typeTrie.get(code) | extPict.get(code) | inCB.get(code));
     i += code > 65535 ? 2 : 1;
     map.push(i);
   }

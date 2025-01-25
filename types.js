@@ -14,4 +14,7 @@ module.exports = {
   LV: 1 << 11,
   LVT: 1 << 12,
   Extended_Pictographic: 1 << 13,
+  InCB_Linker: 1 << 14,
+  InCB_Consonant: 1 << 15,
+  InCB_Extend: 1 << 16,
 };

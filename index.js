@@ -14,100 +14,68 @@ function is(type, bit) {
   return (type & bit) !== 0;
 }
 
-const GB11State = {
-  Initial: 0,
-  ExtendOrZWJ: 1,
-  NotBoundary: 2,
-};
-
-const GB9cState = {
-  Initial: 0,
-  ExtendOrLinker: 1,
-  Linker: 2,
-  Extend: 3,
-  Linker2: 4,
-};
-
-function nextGraphemeClusterSize(ts, start) {
+function nextGraphemeClusterSize(s, ts, start) {
   const L = ts.length;
 
-  let ri = 0;
-  let gb11State = GB11State.Initial;
-  let gb9cState = GB9cState.Initial;
-
-  // GB1: sot ÷ Any
   for (let i = start; i + 1 < L; i++) {
     const curr = ts[i + 0];
     const next = ts[i + 1];
 
-    // for GB12, GB13
-    if (!is(curr, types.Regional_Indicator)) {
-      ri = 0;
+    // GB9c: \p{InCB=Consonant} [ \p{InCB=Extend} \p{InCB=Linker} ]* \p{InCB=Linker} [ \p{InCB=Extend} \p{InCB=Linker} ]* × \p{InCB=Consonant}
+    switch (s.gb9c) {
+    case 0:
+      if (is(curr, types.InCB_Consonant)) s.gb9c = 1;
+      break;
+    case 1:
+      if (is(curr, types.InCB_Extend)) s.gb9c = 1;
+      else if (is(curr, types.InCB_Linker)) s.gb9c = 2;
+      else s.gb9c = is(curr, types.InCB_Consonant) ? 1 : 0;
+      break;
+    case 2:
+      if (is(curr, types.InCB_Extend | types.InCB_Linker)) s.gb9c = 2;
+      else s.gb9c = is(curr, types.InCB_Consonant) ? 1 : 0;
+      break;
     }
 
-    // for GB11: \p{Extended_Pictographic} Extend* ZWJ x \p{Extended_Pictographic}
-    switch (gb11State) {
-      case GB11State.NotBoundary:
-      case GB11State.Initial:
-        if (is(curr, types.Extended_Pictographic)) {
-          gb11State = GB11State.ExtendOrZWJ;
-        } else {
-          gb11State = GB11State.Initial;
-        }
-        break;
-      case GB11State.ExtendOrZWJ:
-        if (is(curr, types.Extend)) {
-          gb11State = GB11State.ExtendOrZWJ;
-        } else if (
-          is(curr, types.ZWJ) &&
-          is(next, types.Extended_Pictographic)
-        ) {
-          gb11State = GB11State.NotBoundary;
-        } else {
-          gb11State = GB11State.Initial;
-        }
-        break;
+    // GB11: \p{Extended_Pictographic} Extend* ZWJ x \p{Extended_Pictographic}
+    switch (s.gb11) {
+    case 0:
+      if (is(curr, types.Extended_Pictographic)) s.gb11 = 1;
+      break;
+    case 1:
+      if (is(curr, types.Extend)) s.gb11 = 1;
+      else if (is(curr, types.ZWJ)) s.gb11 = 2;
+      else s.gb11 = is(curr, types.Extended_Pictographic) ? 1 : 0;
+      break;
+    case 2:
+      s.gb11 = is(curr, types.Extended_Pictographic) ? 1 : 0;
+      break;
     }
 
-    switch (gb9cState) {
-      case GB9cState.Initial:
-        if (is(curr, types.InCB_Consonant)) {
-          gb9cState = GB9cState.ExtendOrLinker;
-        }
-      case GB9cState.ExtendOrLinker:
-        if (is(curr, types.InCB_Extend)) {
-          gb9cState = GB9cState.Linker;
-        } else if (is(curr, types.InCB_Linker)) {
-          gb9cState = GB9cState.Extend;
-        } else if (is(curr, types.InCB_Consonant)) {
-          gb9cState = GB9cState.ExtendOrLinker;
-        } else {
-          gb9cState = GB9cState.Initial;
-        }
-      case GB9cState.Linker:
-        if (is(curr, types.InCB_Linker)) {
-          gb9cState = GB9cState.ExtendOrLinker;
-        } else if (is(curr, types.InCB_Consonant)) {
-          gb9cState = GB9cState.ExtendOrLinker;
-        } else {
-          gb9cState = GB9cState.Initial;
-        }
-      case GB9cState.Extend:
-        if (is(curr, types.InCB_Extend)) {
-          gb9cState = GB9cState.Linker2;
-        } else if (is(curr, types.InCB_Consonant)) {
-          gb9cState = GB9cState.ExtendOrLinker;
-        } else {
-          gb9cState = GB9cState.Initial;
-        }
-      case GB9cState.Linker2:
-        if (is(curr, types.InCB_Linker)) {
-          gb9cState = GB9cState.Extend;
-        } else if (is(curr, types.InCB_Consonant)) {
-          gb9cState = GB9cState.ExtendOrLinker;
-        } else {
-          gb9cState = GB9cState.Initial;
-        }
+    // GB12: sot (RI RI)* RI × RI
+    switch (s.gb12) {
+    case 0:
+      if (is(curr, types.Regional_Indicator)) s.gb12 = 1;
+      else s.gb12 = -1;
+      break;
+    case 1:
+      if (is(curr, types.Regional_Indicator)) s.gb12 = 0;
+      else s.gb12 = -1;
+      break;
+    }
+
+    // GB13: [^RI] (RI RI)* RI × RI
+    switch (s.gb13) {
+    case 0:
+      if (!is(curr, types.Regional_Indicator)) s.gb13 = 1;
+      break;
+    case 1:
+      if (is(curr, types.Regional_Indicator)) s.gb13 = 2;
+      else s.gb13 = 1;
+      break;
+    case 2:
+      s.gb13 = 1;
+      break;
     }
 
     // GB3: CR x LF
@@ -149,28 +117,25 @@ function nextGraphemeClusterSize(ts, start) {
     if (is(curr, types.Prepend)) {
       continue;
     }
-    // GB9c 
-    if (is(next, types.InCB_Consonant) && gb9cState === GB9cState.Extend) {
+    // GB9c: \p{InCB=Consonant} [ \p{InCB=Extend} \p{InCB=Linker} ]* \p{InCB=Linker} [ \p{InCB=Extend} \p{InCB=Linker} ]* × \p{InCB=Consonant}
+    if (is(next, types.InCB_Consonant) && s.gb9c === 2) {
       continue;
     }
     // GB11: \p{Extended_Pictographic} Extend* ZWJ x \p{Extended_Pictographic}
-    if (gb11State === GB11State.NotBoundary) {
+    if (is(next, types.Extended_Pictographic) && s.gb11 === 2) {
       continue;
     }
     // GB12: sot (RI RI)* RI x RI
+    if (is(next, types.Regional_Indicator) && s.gb12 === 1) {
+      continue;
+    }
     // GB13: [^RI] (RI RI)* RI x RI
-    if (
-      is(curr, types.Regional_Indicator) &&
-      is(next, types.Regional_Indicator) &&
-      ri % 2 === 0
-    ) {
-      ri++;
+    if (is(next, types.Regional_Indicator) && s.gb13 === 2) {
       continue;
     }
     // GB999: Any ÷ Any
     return i + 1 - start;
   }
-  // GB2: Any ÷ eot
   return L - start;
 }
 
@@ -185,9 +150,14 @@ module.exports = function split(str) {
     i += code > 65535 ? 2 : 1;
     map.push(i);
   }
-
+  const s = {
+    gb9c: 0,
+    gb11: 0,
+    gb12: 0,
+    gb13: 0,
+  };
   for (let offset = 0; offset < ts.length; ) {
-    const size = nextGraphemeClusterSize(ts, offset);
+    const size = nextGraphemeClusterSize(s, ts, offset);
     const start = map[offset];
     const end = map[offset + size];
     graphemeClusters.push(str.slice(start, end));

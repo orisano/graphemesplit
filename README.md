@@ -1,7 +1,7 @@
 # graphemesplit
 [![npm version](https://badge.fury.io/js/graphemesplit.svg)](https://badge.fury.io/js/graphemesplit)
 
-A JavaScript implementation of the Unicode 15.0 grapheme cluster breaking algorithm. ([UAX #29](http://www.unicode.org/reports/tr29/#Grapheme_Cluster_Boundaries))
+A JavaScript implementation of the Unicode 16.0 grapheme cluster breaking algorithm. ([UAX #29](http://www.unicode.org/reports/tr29/#Grapheme_Cluster_Boundaries))
 
 ## Installation
 ```bash
@@ -26,8 +26,10 @@ MIT
 
 [Unicode® Standard Annex #29](https://unicode.org/reports/tr29/)
 
-[GraphemeBreakProperty.txt](https://www.unicode.org/Public/15.0.0/ucd/auxiliary/GraphemeBreakProperty.txt)
+[GraphemeBreakProperty.txt](https://www.unicode.org/Public/16.0.0/ucd/auxiliary/GraphemeBreakProperty.txt)
 
-[GraphemeBreakTest.txt](https://www.unicode.org/Public/15.0.0/ucd/auxiliary/GraphemeBreakTest.txt)
+[GraphemeBreakTest.txt](https://www.unicode.org/Public/16.0.0/ucd/auxiliary/GraphemeBreakTest.txt)
 
-[emoji-data.txt](https://www.unicode.org/Public/15.0.0/ucd/emoji/emoji-data.txt)
+[DerivedCoreProperties.txt](https://www.unicode.org/Public/16.0.0/ucd/DerivedCoreProperties.txt)
+
+[emoji-data.txt](https://www.unicode.org/Public/16.0.0/ucd/emoji/emoji-data.txt)
